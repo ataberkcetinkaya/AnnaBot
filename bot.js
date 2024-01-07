@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Partials, REST, Routes, ActivityType, MessageActionRow, MessageButton } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, REST, Routes, ActivityType, MessageActionRow, MessageButton, Collection } = require('discord.js');
 const { token, botID } = require('./settings.json');
 const ytdl = require('ytdl-core');
 
@@ -30,12 +30,15 @@ const client = new Client({
 ],
 });
 
-const rest = new REST({ version: '10' }).setToken(token);
+client.events = new Collection();
+
+const { loadEvents } = require('./Handlers/eventHandler.js');
+loadEvents(client);
 
 client.login(token).then(() => {
-  client.user.setStatus('online');
-  client.user.setActivity({ name: 'Eminem', type: ActivityType.Listening });
 });
+
+const rest = new REST({ version: '10' }).setToken(token);
 
 client.once('ready', () => {
   console.log('Anna is online');
